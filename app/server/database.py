@@ -28,7 +28,7 @@ async def retrieve_students():
 
 # Add a new student to the database
 async def add_student(student_data:dict) -> dict:
-    student = student_collection.insert_one(student_data)
+    student = await student_collection.insert_one(student_data)
     new_student = await student_collection.find_one({"_id":student.inserted_id})
     if student:
         return student_helper(new_student)
@@ -48,7 +48,7 @@ async def update_student(id:str,data:dict):
         return False
     student = await student_collection.find_one({"_id":ObjectId(id)})
     if student:
-        updated_student = student_collection.update_one(
+        updated_student = await student_collection.update_one(
             {"_id":ObjectId(id)}, {"$set":data}
         )
         if updated_student:
